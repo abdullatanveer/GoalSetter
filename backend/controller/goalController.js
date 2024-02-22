@@ -48,11 +48,22 @@ const updateGoal=asyncHandler( async (req,res)=>{
 
 const deleteGoal=asyncHandler(async (req,res)=>{
     const goal= await Goal.findById(req.params.id);
+    console.log(goal.user);
 
     if(!goal){
         res.status(400);
         throw new Errror("No gola found with this id")
     }
+    if(!req.user){
+        res.status(401);
+        throw new Error("Not Authorized")
+    
+    }
+    // console.log(goal.user);
+    // if(goal.user.toString()!==req.user._id.toString()){
+    //     res.status(401);
+    //     throw new Error("Not Authorized")
+    // }
      await goal.deleteOne();
 
     res.status(200).json({message:`Goal deleted with id ${req.params.id}`})
