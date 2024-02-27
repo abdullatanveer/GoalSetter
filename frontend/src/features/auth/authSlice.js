@@ -26,6 +26,10 @@ const user=JSON.parse(localStorage.getItem('user'));
     }
      
  })
+ // logout a userr
+ export const logOut=createAsyncThunk ('auth/logOut',async()=>{
+      authService.logOut();
+ })
 
  export const authSlice=createSlice({
     name:"auth",
@@ -38,6 +42,7 @@ const user=JSON.parse(localStorage.getItem('user'));
             state.message='';
 
         },
+         
     },
     extraReducers:(builder)=>{
      builder
@@ -54,6 +59,12 @@ const user=JSON.parse(localStorage.getItem('user'));
         state.isError=true;
         state.message=action.payload;
       })
+    
+
+         
+        .addCase(logOut.fulfilled, (state) => {
+            state.user = null
+          })
     },
     
  })

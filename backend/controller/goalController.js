@@ -7,7 +7,7 @@ const Goal=require('../models/goalModel')
 //@route GET /api/goals
 //access Public
  const getGoals = asyncHandler(async (req, res) => {
-    const goal= await Goal.find();
+    const goal= await Goal.find({user:req.user._id});
     res.status(200).json(goal);
 
 });
@@ -20,8 +20,14 @@ const Goal=require('../models/goalModel')
         res.status(400);
         throw new Error('Invalid data');
     }
+    if(!req.body.user){
+
+    res.status(401);
+    throw new Error('Not Authorized');
+    }
     const goal =await Goal.create({
         text:req.body.text,
+        user:req.user._id
     
     })
     res.status(200).json(goal);
@@ -60,7 +66,7 @@ const deleteGoal=asyncHandler(async (req,res)=>{
     
     }
     // console.log(goal.user);
-    // if(goal.user.toString()!==req.user._id.toString()){
+    // if(goal.user.toString() !==req.user._id.toString()){
     //     res.status(401);
     //     throw new Error("Not Authorized")
     // }
