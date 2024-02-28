@@ -16,7 +16,12 @@ const user=JSON.parse(localStorage.getItem('user'));
 
  export const registerUser=createAsyncThunk('auth/register ' ,async(user ,thunkAPI)=>{
     try {
-        await authService.register(user);
+        // await authService.register(user);
+        const response= await authService.register(user);
+        if(response.data){
+            localStorage.setItem('user',JSON.stringify(response.data));
+            return response.data;
+        }
     } catch (error) {
         const message=(
             error.response && error.response.data && error.response.data.message ) 
